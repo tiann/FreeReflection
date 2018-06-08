@@ -53,7 +53,7 @@ publish {
     userOrg = 'twsxtd'
     groupId = 'me.weishu'
     artifactId = 'free_reflection'
-    publishVersion = '1.0.0'
+    publishVersion = '1.1.0'
     desc = 'Use Relection above Android P without any restriction'
     website = 'https://github.com/tiann/FreeRelfection'
 }

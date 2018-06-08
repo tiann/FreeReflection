@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 try {
-                    Class<?> dimenClass = Class.forName("");
+                    Class<?> dimenClass = Class.forName("com.android.internal.R$dimen");
                     Field sCurrentActivityThread = dimenClass.getDeclaredField("navigation_bar_width");
                     toast("field: " + sCurrentActivityThread);
 
