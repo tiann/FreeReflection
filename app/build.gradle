@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "26.0.2"
+    buildToolsVersion "28.0.0"
     defaultConfig {
         applicationId "me.weishu.freereflection.app"
         minSdkVersion 15
@@ -22,8 +22,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(":library")
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(":library")
+    implementation 'com.android.support:appcompat-v7:28.0.0-alpha3'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
 }
