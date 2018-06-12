@@ -90,15 +90,13 @@ int unseal(JNIEnv *env, jint targetSdkVersion) {
 
     // TODO validate
 
-    EnforcementPolicy policy = partialRuntime->hidden_api_policy_;
-
     LOGV("is_java_debuggable: %d, is_native_debuggable: %d, safe_mode: %d", is_java_debuggable, is_native_debuggable, safe_mode);
-    LOGV("hidden api policy before : %d", policy);
+    LOGV("hidden api policy before : %d", partialRuntime->hidden_api_policy_);
     LOGV("fingerprint: %s", partialRuntime->fingerprint_.c_str());
 
     partialRuntime->hidden_api_policy_ = EnforcementPolicy::kNoChecks;
 
-    LOGV("hidden api policy after: %d", policy);
+    LOGV("hidden api policy after: %d", partialRuntime->hidden_api_policy_);
     return 0;
 }
 
