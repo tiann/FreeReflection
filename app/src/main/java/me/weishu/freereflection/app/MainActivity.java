@@ -1,6 +1,8 @@
 package me.weishu.freereflection.app;
 
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
+import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import me.weishu.reflection.Reflection;
 
@@ -27,11 +30,16 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 try {
-                    Class<?> dimenClass = Class.forName("com.android.internal.R$dimen");
-                    Field sCurrentActivityThread = dimenClass.getDeclaredField("navigation_bar_width");
-                    toast("field: " + sCurrentActivityThread);
+                    Method setHiddenApiEnforcementPolicy = ApplicationInfo.class.getDeclaredMethod("setHiddenApiEnforcementPolicy", int.class);
+                    Log.i(TAG, "setHiddenApiEnforcementPolicy:" + setHiddenApiEnforcementPolicy);
 
+                    Class<?> assetManagerClass = AssetManager.class;
+                    Method ensureStringBlocks = assetManagerClass.getDeclaredMethod("ensureStringBlocks");
+                    ensureStringBlocks.setAccessible(true);
+                    ensureStringBlocks.invoke(getAssets());
+                    Log.i(TAG, "call success!!");
                 } catch (Throwable e) {
+                    Log.e(TAG, "error:", e);
                     toast("error: " + e);
                 }
             }

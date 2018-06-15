@@ -1,8 +1,12 @@
 package me.weishu.reflection;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
+import android.util.Log;
+
+import java.lang.reflect.Method;
 
 /**
  * @author weishu
@@ -18,6 +22,8 @@ public class Reflection {
     private static native int unsealNative(int targetSdkVersion);
 
     private static int UNKNOWN = -9999;
+
+    private static final int ERROR_SET_APPLICATION_FAILED = -20;
 
     private static int unsealed = UNKNOWN;
 
@@ -38,8 +44,14 @@ public class Reflection {
             if (unsealed == UNKNOWN) {
                 unsealed = unsealNative(targetSdkVersion);
                 if (unsealed >= 0) {
-                    // TODO: Keep sync with ApplicationInfo.ApiEnforcementPolicy
-
+                    try {
+                        @SuppressLint("PrivateApi") Method setHiddenApiEnforcementPolicy = ApplicationInfo.class
+                                .getDeclaredMethod("setHiddenApiEnforcementPolicy", int.class);
+                        setHiddenApiEnforcementPolicy.invoke(applicationInfo, 0);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        unsealed = ERROR_SET_APPLICATION_FAILED;
+                    }
                 }
             }
         }
