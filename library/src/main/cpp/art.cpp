@@ -16,12 +16,17 @@ int findOffset(void *start, int regionStart, int regionEnd, size_t value) {
     char *c_start = (char *) start;
 
     for (int i = regionStart; i < regionEnd; i += 4) {
-        size_t *current_value = (size_t *) (c_start + i);
-        if (value == *current_value) {
-            LOGV("found offset: %d", i);
+        size_t *size_t_current_value = (size_t *) (c_start + i);
+        int *int_current_value = (int *) (c_start + i);
+        if (value == *size_t_current_value) {
+            LOGV("found size_t offset: %d", i);
+            return i;
+        } else if (value == *int_current_value) {
+            LOGV("found int offset: %d", i);
             return i;
         }
     }
+    
     return -2;
 }
 
@@ -35,7 +40,7 @@ int unseal(JNIEnv *env, jint targetSdkVersion) {
 
     LOGV("runtime ptr: %p, vmExtPtr: %p", runtime, javaVMExt);
 
-    const int MAX = 1000;
+    const int MAX = 2000;
     int offsetOfVmExt = findOffset(runtime, 0, MAX, (size_t) javaVMExt);
     LOGV("offsetOfVmExt: %d", offsetOfVmExt);
 
