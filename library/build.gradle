@@ -17,10 +17,6 @@ android {
                 arguments '-DANDROID_STL=c++_static'
             }
         }
-
-        ndk {
-            abiFilters 'armeabi-v7a', "x86"
-        }
     }
 
     buildTypes {
@@ -52,7 +48,7 @@ publish {
     userOrg = 'twsxtd'
     groupId = 'me.weishu'
     artifactId = 'free_reflection'
-    publishVersion = '1.1.0'
+    publishVersion = '1.2.0'
     desc = 'Use Relection above Android P without any restriction'
     website = 'https://github.com/tiann/FreeRelfection'
 }
