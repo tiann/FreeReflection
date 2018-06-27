@@ -7,7 +7,7 @@
 1. Add dependency to your project(jcenter):
 
 ```gradle
-implementation 'me.weishu:free_reflection:1.0.0'
+implementation 'me.weishu:free_reflection:1.2.0'
 ```
 
 2. Add one line to your `Application.attachBaseContext` :
@@ -22,11 +22,15 @@ protected void attachBaseContext(Context base) {
 
 Then you can use the reflection API normally, all the restrictions are gone. Enjoy yourself :)
 
+## Under the hood
+
+[free-reflection-above-android-p](http://weishu.me/2018/06/07/free-reflection-above-android-p/)
+
 ## Donations
 
 If you like this project, buy me a cup of coffee! :)
 
-Bitcoins: 39Wst8oL74pRP2vKPkPihH6RFQF4hWoBqU
+BitCoin: 39Wst8oL74pRP2vKPkPihH6RFQF4hWoBqU
 
 ## License
 
