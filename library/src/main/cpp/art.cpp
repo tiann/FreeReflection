@@ -8,7 +8,8 @@
 
 #define LOGV(...)  ((void)__android_log_print(ANDROID_LOG_INFO, "FreeReflect", __VA_ARGS__))
 
-int findOffset(void *start, int regionStart, int regionEnd, size_t value) {
+template<typename T>
+int findOffset(void *start, int regionStart, int regionEnd, T value) {
 
     if (NULL == start || regionEnd <= 0 || regionStart < 0) {
         return -1;
@@ -16,17 +17,12 @@ int findOffset(void *start, int regionStart, int regionEnd, size_t value) {
     char *c_start = (char *) start;
 
     for (int i = regionStart; i < regionEnd; i += 4) {
-        size_t *size_t_current_value = (size_t *) (c_start + i);
-        int *int_current_value = (int *) (c_start + i);
-        if (value == *size_t_current_value) {
-            LOGV("found size_t offset: %d", i);
-            return i;
-        } else if (value == *int_current_value) {
-            LOGV("found int offset: %d", i);
+        T *current_value = (T *) (c_start + i);
+        if (value == *current_value) {
+            LOGV("found offset: %d", i);
             return i;
         }
     }
-    
     return -2;
 }
 
