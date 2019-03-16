@@ -3,10 +3,13 @@ package me.weishu.reflection;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.os.Build;
 import android.util.Log;
 
 import java.lang.reflect.Method;
+
+import static android.os.Build.VERSION.PREVIEW_SDK_INT;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.P;
 
 /**
  * @author weishu
@@ -44,8 +47,13 @@ public class Reflection {
     private static int unsealed = UNKNOWN;
 
     public static int unseal(Context context) {
-        if (Build.VERSION.SDK_INT < 28) {
+        if (SDK_INT < 28) {
             // Below Android P, ignore
+            return 0;
+        }
+
+        // try exempt API first.
+        if (exemptAll()) {
             return 0;
         }
 
@@ -57,25 +65,37 @@ public class Reflection {
         int targetSdkVersion = applicationInfo.targetSdkVersion;
 
         synchronized (Reflection.class) {
-            if (unsealed == UNKNOWN) {
-                unsealed = unsealNative(targetSdkVersion);
-                if (unsealed >= 0) {
-                    try {
-                        @SuppressLint("PrivateApi") Method setHiddenApiEnforcementPolicy = ApplicationInfo.class
-                                .getDeclaredMethod("setHiddenApiEnforcementPolicy", int.class);
-                        setHiddenApiEnforcementPolicy.invoke(applicationInfo, 0);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                        unsealed = ERROR_SET_APPLICATION_FAILED;
-                    }
-                }
+            if (unsealed != UNKNOWN) {
+                return unsealed;
+            }
+
+            unsealed = unsealNative(targetSdkVersion);
+            if (unsealed < 0) {
+                return unsealed;
+            }
+
+            if ((SDK_INT == P && PREVIEW_SDK_INT > 0) || SDK_INT > P) {
+                return unsealed;
+            }
+
+            // Android P, we need to sync the flags with ApplicationInfo
+            // We needn't to this on Android Q.
+            try {
+                @SuppressLint("PrivateApi") Method setHiddenApiEnforcementPolicy = ApplicationInfo.class
+                        .getDeclaredMethod("setHiddenApiEnforcementPolicy", int.class);
+                setHiddenApiEnforcementPolicy.invoke(applicationInfo, 0);
+            } catch (Throwable e) {
+                e.printStackTrace();
+                unsealed = ERROR_SET_APPLICATION_FAILED;
             }
         }
+
         return unsealed;
     }
 
     /**
      * make the method exempted from hidden API check.
+     *
      * @param method the method signature prefix.
      * @return true if success.
      */
@@ -85,6 +105,7 @@ public class Reflection {
 
     /**
      * make specific methods exempted from hidden API check.
+     *
      * @param methods the method signature prefix, such as "Ldalvik/system", "Landroid" or even "L"
      * @return true if success
      */
@@ -103,6 +124,7 @@ public class Reflection {
 
     /**
      * Make all hidden API exempted.
+     *
      * @return true if success.
      */
     public static boolean exemptAll() {
