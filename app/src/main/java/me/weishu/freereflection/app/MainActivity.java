@@ -1,8 +1,6 @@
 package me.weishu.freereflection.app;
 
 import android.app.Activity;
-import android.content.pm.ApplicationInfo;
-import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -30,13 +28,11 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 try {
-                    Method setHiddenApiEnforcementPolicy = ApplicationInfo.class.getDeclaredMethod("setHiddenApiEnforcementPolicy", int.class);
-                    Log.i(TAG, "setHiddenApiEnforcementPolicy:" + setHiddenApiEnforcementPolicy);
 
-                    Class<?> assetManagerClass = AssetManager.class;
-                    Method ensureStringBlocks = assetManagerClass.getDeclaredMethod("ensureStringBlocks");
-                    ensureStringBlocks.setAccessible(true);
-                    ensureStringBlocks.invoke(getAssets());
+                    Class<?> activityClass = Class.forName("dalvik.system.VMRuntime");
+                    Method field = activityClass.getDeclaredMethod("setHiddenApiExemptions", String[].class);
+                    field.setAccessible(true);
+
                     Log.i(TAG, "call success!!");
                 } catch (Throwable e) {
                     Log.e(TAG, "error:", e);
