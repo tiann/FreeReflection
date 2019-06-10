@@ -35,7 +35,7 @@ public class Reflection {
             Log.e(TAG, "reflect bootstrap failed:", e);
         }
 
-        System.loadLibrary("free-reflection");
+        // System.loadLibrary("free-reflection");
     }
 
     private static native int unsealNative(int targetSdkVersion);
@@ -43,6 +43,8 @@ public class Reflection {
     private static int UNKNOWN = -9999;
 
     private static final int ERROR_SET_APPLICATION_FAILED = -20;
+
+    private static final int ERROR_EXEMPT_FAILED = -21;
 
     private static int unsealed = UNKNOWN;
 
@@ -55,42 +57,9 @@ public class Reflection {
         // try exempt API first.
         if (exemptAll()) {
             return 0;
+        } else {
+            return ERROR_EXEMPT_FAILED;
         }
-
-        if (context == null) {
-            return -10;
-        }
-
-        ApplicationInfo applicationInfo = context.getApplicationInfo();
-        int targetSdkVersion = applicationInfo.targetSdkVersion;
-
-        synchronized (Reflection.class) {
-            if (unsealed != UNKNOWN) {
-                return unsealed;
-            }
-
-            unsealed = unsealNative(targetSdkVersion);
-            if (unsealed < 0) {
-                return unsealed;
-            }
-
-            if ((SDK_INT == P && PREVIEW_SDK_INT > 0) || SDK_INT > P) {
-                return unsealed;
-            }
-
-            // Android P, we need to sync the flags with ApplicationInfo
-            // We needn't to this on Android Q.
-            try {
-                @SuppressLint("PrivateApi") Method setHiddenApiEnforcementPolicy = ApplicationInfo.class
-                        .getDeclaredMethod("setHiddenApiEnforcementPolicy", int.class);
-                setHiddenApiEnforcementPolicy.invoke(applicationInfo, 0);
-            } catch (Throwable e) {
-                e.printStackTrace();
-                unsealed = ERROR_SET_APPLICATION_FAILED;
-            }
-        }
-
-        return unsealed;
     }
 
     /**

@@ -24,11 +24,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    /*
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
         }
-    }
+    }*/
     lintOptions {
         abortOnError false
     }
@@ -47,7 +48,7 @@ publish {
     userOrg = 'twsxtd'
     groupId = 'me.weishu'
     artifactId = 'free_reflection'
-    publishVersion = '2.0.0'
+    publishVersion = '2.1.0'
     desc = 'Use Relection above Android P without any restriction'
     website = 'https://github.com/tiann/FreeRelfection'
 }
