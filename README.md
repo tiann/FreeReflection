@@ -7,7 +7,7 @@
 1. Add dependency to your project(jcenter):
 
 ```gradle
-implementation 'me.weishu:free_reflection:2.1.0'
+implementation 'me.weishu:free_reflection:2.2.0'
 ```
 
 2. Add one line to your `Application.attachBaseContext` :
