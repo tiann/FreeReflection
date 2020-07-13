@@ -44,10 +44,8 @@ public class MainActivity extends Activity {
         findViewById(R.id.unreal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                int ret = Reflection.unseal(MainActivity.this);
-//                toast("unseal result: " + ret);
-                boolean exempt = Reflection.exemptAll();
-                toast("exempt result: " + exempt);
+                int ret = Reflection.unseal(MainActivity.this);
+                toast("unseal result: " + ret);
             }
         });
     }
