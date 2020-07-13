@@ -5,6 +5,8 @@
 #include <android/log.h>
 #include <vector>
 #include <string>
+#include <stdlib.h>
+#include <sys/system_properties.h>
 
 #define LOGV(...)  ((void)__android_log_print(ANDROID_LOG_INFO, "FreeReflect", __VA_ARGS__))
 
@@ -26,7 +28,35 @@ int findOffset(void *start, int regionStart, int regionEnd, T value) {
     return -2;
 }
 
+template<typename Runtime>
+int unseal0(Runtime *partialRuntime) {
+    bool is_java_debuggable = partialRuntime->is_java_debuggable_;
+    bool is_native_debuggable = partialRuntime->is_native_debuggable_;
+    bool safe_mode = partialRuntime->safe_mode_;
+
+    // TODO validate
+
+    LOGV("is_java_debuggable: %d, is_native_debuggable: %d, safe_mode: %d", is_java_debuggable,
+         is_native_debuggable, safe_mode);
+    LOGV("hidden api policy before : %d", partialRuntime->hidden_api_policy_);
+    LOGV("fingerprint: %s", partialRuntime->fingerprint_.c_str());
+
+    partialRuntime->hidden_api_policy_ = EnforcementPolicy::kNoChecks;
+    LOGV("hidden api policy after: %d", partialRuntime->hidden_api_policy_);
+    return 0;
+}
+
 int unseal(JNIEnv *env, jint targetSdkVersion) {
+
+    char api_level_str[5];
+    char preview_api_str[5];
+    __system_property_get("ro.build.version.sdk", api_level_str);
+    __system_property_get("ro.build.version.preview_sdk", preview_api_str);
+
+    int api_level = atoi(api_level_str);
+    bool is_preview = atoi(preview_api_str) > 0;
+
+    bool isAndroidR = api_level >= 30 || (api_level == 29 && is_preview);
 
     JavaVM *javaVM;
     env->GetJavaVM(&javaVM);
@@ -44,7 +74,12 @@ int unseal(JNIEnv *env, jint targetSdkVersion) {
         return -1;
     }
 
-    int targetSdkVersionOffset = findOffset(runtime, offsetOfVmExt, MAX, targetSdkVersion);
+    int startOffset = offsetOfVmExt;
+    if (isAndroidR) {
+        startOffset += 200;
+    }
+
+    int targetSdkVersionOffset = findOffset(runtime, startOffset, MAX, targetSdkVersion);
     LOGV("target: %d", targetSdkVersionOffset);
 
     if (targetSdkVersionOffset < 0) {
@@ -83,21 +118,16 @@ int unseal(JNIEnv *env, jint targetSdkVersion) {
     }
     */
 
-    PartialRuntime *partialRuntime = (PartialRuntime *) ((char *) runtime + targetSdkVersionOffset);
+    if (isAndroidR) {
+        auto *partialRuntime = reinterpret_cast<PartialRuntimeR *>((char *) runtime +
+                                                                              targetSdkVersionOffset);
+        unseal0<PartialRuntimeR>(partialRuntime);
+    } else {
+        auto *partialRuntime = (PartialRuntime *) ((char *) runtime +
+                                                             targetSdkVersionOffset);
+        unseal0<PartialRuntime>(partialRuntime);
+    }
 
-    bool is_java_debuggable = partialRuntime->is_java_debuggable_;
-    bool is_native_debuggable = partialRuntime->is_native_debuggable_;
-    bool safe_mode = partialRuntime->safe_mode_;
-
-    // TODO validate
-
-    LOGV("is_java_debuggable: %d, is_native_debuggable: %d, safe_mode: %d", is_java_debuggable, is_native_debuggable, safe_mode);
-    LOGV("hidden api policy before : %d", partialRuntime->hidden_api_policy_);
-    LOGV("fingerprint: %s", partialRuntime->fingerprint_.c_str());
-
-    partialRuntime->hidden_api_policy_ = EnforcementPolicy::kNoChecks;
-
-    LOGV("hidden api policy after: %d", partialRuntime->hidden_api_policy_);
     return 0;
 }
 
