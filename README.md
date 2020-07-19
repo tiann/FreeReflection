@@ -1,13 +1,13 @@
 # FreeReflection
 
-**FreeReflection** is a library that lets you use reflection without any restriction above Android P (includes Q).
+**FreeReflection** is a library that lets you use reflection without any restriction above Android P (includes Q and R).
 
 ## Usage
 
 1. Add dependency to your project(jcenter):
 
 ```gradle
-implementation 'me.weishu:free_reflection:2.2.0'
+implementation 'me.weishu:free_reflection:3.0.1'
 ```
 
 2. Add one line to your `Application.attachBaseContext` :
