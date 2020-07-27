@@ -43,9 +43,9 @@ public class Reflection {
 
     private static boolean unsealByDexFile(Context context) {
         byte[] bytes = Base64.decode(DEX, Base64.NO_WRAP);
+        File codeCacheDir = context.getCodeCacheDir();
+        File code = new File(codeCacheDir, System.currentTimeMillis() + ".dex");
         try {
-            File codeCacheDir = context.getCodeCacheDir();
-            File code = new File(codeCacheDir, System.currentTimeMillis() + ".dex");
 
             try(FileOutputStream fos = new FileOutputStream(code)) {
                 fos.write(bytes);
@@ -58,6 +58,11 @@ public class Reflection {
         } catch (Throwable e) {
             e.printStackTrace();
             return false;
+        } finally {
+            if (code.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                code.delete();
+            }
         }
     }
 }
