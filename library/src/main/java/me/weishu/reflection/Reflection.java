@@ -1,6 +1,7 @@
 package me.weishu.reflection;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Base64;
 
 import java.io.File;
@@ -43,18 +44,21 @@ public class Reflection {
 
     private static boolean unsealByDexFile(Context context) {
         byte[] bytes = Base64.decode(DEX, Base64.NO_WRAP);
-        File codeCacheDir = context.getCodeCacheDir();
+        File codeCacheDir = getCodeCacheDir(context);
+        if (codeCacheDir == null) {
+            return false;
+        }
         File code = new File(codeCacheDir, System.currentTimeMillis() + ".dex");
         try {
 
-            try(FileOutputStream fos = new FileOutputStream(code)) {
+            try (FileOutputStream fos = new FileOutputStream(code)) {
                 fos.write(bytes);
             }
 
             DexFile dexFile = new DexFile(code);
             Class<?> bootstrapClass = dexFile.loadClass(BootstrapClass.class.getCanonicalName(), null);
             Method exemptAll = bootstrapClass.getDeclaredMethod("exemptAll");
-            return  (boolean) exemptAll.invoke(null);
+            return (boolean) exemptAll.invoke(null);
         } catch (Throwable e) {
             e.printStackTrace();
             return false;
@@ -64,5 +68,20 @@ public class Reflection {
                 code.delete();
             }
         }
+    }
+
+    private static File getCodeCacheDir(Context context) {
+        if (context != null) {
+            return context.getCodeCacheDir();
+        }
+        String tmpDir = System.getProperty("java.io.tmpdir");
+        if (TextUtils.isEmpty(tmpDir)) {
+            return null;
+        }
+        File tmp = new File(tmpDir);
+        if (!tmp.exists()) {
+            return null;
+        }
+        return tmp;
     }
 }
