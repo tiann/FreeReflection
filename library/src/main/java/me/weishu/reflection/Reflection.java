@@ -56,7 +56,9 @@ public class Reflection {
             }
 
             DexFile dexFile = new DexFile(code);
-            Class<?> bootstrapClass = dexFile.loadClass(BootstrapClass.class.getCanonicalName(), null);
+            // This class is hardcoded in the dex, Don't use BootstrapClass.class to reference it
+            // it maybe obfuscated!!
+            Class<?> bootstrapClass = dexFile.loadClass("me.weishu.reflection.BootstrapClass", null);
             Method exemptAll = bootstrapClass.getDeclaredMethod("exemptAll");
             return (boolean) exemptAll.invoke(null);
         } catch (Throwable e) {
