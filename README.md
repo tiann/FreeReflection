@@ -4,13 +4,24 @@
 
 ## Usage
 
-1. Add dependency to your project(jcenter):
+1. Add it in your root build.gradle at the end of repositories(jitpack):
 
 ```gradle
-implementation 'me.weishu:free_reflection:3.0.1'
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
 ```
 
-2. Add one line to your `Application.attachBaseContext` :
+2. Add dependency to your project(jcenter):
+
+```gradle
+implementation 'com.github.tiann:FreeReflection:3.1.0'
+```
+
+3. Add one line to your `Application.attachBaseContext` :
 
 ```java
 @Override

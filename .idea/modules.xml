@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FreeReflection.iml" filepath="$PROJECT_DIR$/FreeReflection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FreeReflection.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FreeReflection.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library/FreeReflection.library.iml" filepath="$PROJECT_DIR$/.idea/modules/library/FreeReflection.library.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
     </modules>
