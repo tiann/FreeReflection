@@ -20,6 +20,8 @@ android {
         consumerProguardFile 'proguard-rules.pro'
     }
 
+    packageBuildConfig = false
+
     buildTypes {
         release {
             minifyEnabled false
