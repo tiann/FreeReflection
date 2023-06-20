@@ -55,6 +55,15 @@ public class Reflection {
                 fos.write(bytes);
             }
 
+            // Support target Android U.
+            // https://developer.android.com/about/versions/14/behavior-changes-14#safer-dynamic-code-loading
+            try {
+                //noinspection ResultOfMethodCallIgnored
+                code.setReadOnly();
+            } catch (Throwable ignore) {
+            }
+
+            @SuppressWarnings("deprecation")
             DexFile dexFile = new DexFile(code);
             // This class is hardcoded in the dex, Don't use BootstrapClass.class to reference it
             // it maybe obfuscated!!

@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FreeReflection.iml" filepath="$PROJECT_DIR$/FreeReflection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FreeReflection.iml" filepath="$PROJECT_DIR$/.idea/modules/FreeReflection.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FreeReflection.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FreeReflection.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FreeReflection.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FreeReflection.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FreeReflection.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FreeReflection.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FreeReflection.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FreeReflection.app.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/library/FreeReflection.library.iml" filepath="$PROJECT_DIR$/.idea/modules/library/FreeReflection.library.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library/FreeReflection.library.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/library/FreeReflection.library.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library/FreeReflection.library.main.iml" filepath="$PROJECT_DIR$/.idea/modules/library/FreeReflection.library.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library/FreeReflection.library.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/library/FreeReflection.library.unitTest.iml" />
     </modules>
   </component>
 </project>
