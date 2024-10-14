@@ -16,8 +16,6 @@ android {
                 arguments '-DANDROID_STL=c++_static'
             }
         }
-        // provider proguard-rules
-        consumerProguardFile 'proguard-rules.pro'
     }
 
     packageBuildConfig = false
