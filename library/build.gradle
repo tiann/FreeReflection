@@ -18,8 +18,6 @@ android {
         }
     }
 
-    packageBuildConfig = false
-
     buildTypes {
         release {
             minifyEnabled false
@@ -44,13 +42,18 @@ dependencies {
     androidTestImplementation 'junit:junit:4.12'
 }
 
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'maven-publish'
 
-publish {
-    userOrg = 'twsxtd'
-    groupId = 'me.weishu'
-    artifactId = 'free_reflection'
-    publishVersion = '3.1.0'
-    desc = 'Use Relection above Android P without any restriction'
-    website = 'https://github.com/tiann/FreeRelfection'
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId = 'me.weishu'
+                artifactId = 'free_reflection'
+                version = '3.1.0'
+
+                from components.release
+            }
+        }
+    }
 }
